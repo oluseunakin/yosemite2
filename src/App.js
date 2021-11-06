@@ -14,6 +14,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
+  Text
 } from '@chakra-ui/react';
 import Pokemon from './components/Pokemon';
 
@@ -41,8 +42,8 @@ function App() {
   }, []);
 
   function extra(data) {
-    setSearch(data)
-    onOpen()
+    setSearch(data);
+    onOpen();
   }
   return (
     <ChakraProvider theme={theme}>
@@ -59,50 +60,66 @@ function App() {
               const search = searchRef.current.value;
               if (search.length > 0) {
                 if (e.key === 'Enter') {
-                  const response = await (
-                    await fetch(`${api}${search}`)
-                  ).json();
-                  extra(<Pokemon
-                    team={team}
-                    pokemon={response}
-                    setTeam={setTeam}
-                    old={oldTeam}
-                  />);
+                  try {
+                    const response = await (
+                      await fetch(`${api}${search}`)
+                    ).json();
+                    extra(
+                      <Pokemon
+                        team={team}
+                        pokemon={response}
+                        setTeam={setTeam}
+                        old={oldTeam}
+                      />
+                    );
+                  } catch {
+                    extra(<Heading as='h5' size='sm'>Pokemon not found</Heading>);
+                  }
                 }
               }
             }}
           />
         </Center>
-        <Modal isOpen={isOpen} onClose={() => {
-          searchRef.current.value = ''
-          onClose()}}>
+        <Modal
+          isOpen={isOpen}
+          onClose={() => {
+            searchRef.current.value = '';
+            onClose();
+          }}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalCloseButton />
-            <ModalBody>{search}</ModalBody>
+            <ModalBody m="3">{search}</ModalBody>
           </ModalContent>
         </Modal>
       </Container>
       <SimpleGrid columns={[1, null, 2]} spacing="50px" mt="10">
         <Box>
           <Center mb="5">
-            <Heading as="h3">My Team</Heading>
+            <Heading as="h3" size='lg'>My Team</Heading>
           </Center>
-          {team.map((pokemon, i) => (
-            <Pokemon
-              key={i}
-              team={team}
-              pokemon={pokemon}
-              setTeam={setTeam}
-              old={oldTeam}
-              extra={extra}
-            />
-          ))}
+          {team.length > 0 ? (
+            team.map((pokemon, i) => (
+              <Pokemon
+                key={i}
+                team={team}
+                pokemon={pokemon}
+                setTeam={setTeam}
+                old={oldTeam}
+                extra={extra}
+              />
+            ))
+          ) : (
+            <Center>
+              <Text size='md'>Assemble a team by adding pokemons</Text>{' '}
+            </Center>
+          )}
         </Box>
 
         <Box>
           <Center mb="5">
-            <Heading as="h5">Pokemons</Heading>
+            <Heading as="h3" size='lg'>Pokemons</Heading>
           </Center>
           {content.map((pokemon, i) => (
             <Pokemon

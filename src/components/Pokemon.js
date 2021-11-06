@@ -70,7 +70,7 @@ export default function Pokemon({ team, pokemon, setTeam, old, extra }) {
                   </Center>
                   {pokemon.abilities.map(ability => (
                     <>
-                      <Text fontSize="xl">{ability.ability.name}</Text>
+                      <Text fontSize="lg">{ability.ability.name}</Text>
                       <Text>
                         This ability is {ability.is_hidden ? '' : 'not'} hidden
                       </Text>
@@ -93,9 +93,9 @@ export default function Pokemon({ team, pokemon, setTeam, old, extra }) {
               setClicked('moves');
               setRender(
                 <Box>
-                  <Text>----------Moves----------</Text>
+                  <Text fontSize='2xl'>----------Moves----------</Text>
                   {pokemon.moves.map(move => (
-                    <Text fontSize="xl">{move.move.name}</Text>
+                    <Text fontSize='lg'>{move.move.name}</Text>
                   ))}
                 </Box>
               );
